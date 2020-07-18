@@ -10,7 +10,7 @@
 """
 
 from random import choice
-import scrapper
+import narrator
 import argparse, sys
 import regex as re
 
@@ -19,7 +19,7 @@ def main():
   global output
   parser = argparse.ArgumentParser(description='Darkest Dungeon Wiki Scrapper.\nSelect the desired page and details to scrap using the arguments below.')
   ## Global arguments
-  parser.add_argument('-o','--output', type=str, help='Ficheiro de output')
+  parser.add_argument('-o','--output', type=str, help='Output File')
   # parser.add_argument('-d','--download', action='store_true', help='Download all scraped Audio/Image sources (from the scraped results, in any page)')
   parser.add_argument('--html', action='store_true', help='Scrap all request elements, but leave them in their original HTML parts.')
   ## Page selector arguments
@@ -47,15 +47,15 @@ def main():
   # Some requests on the same page can be merged.
   if args['narrator']: # Narrator page (default: scrap quotes and audio sources)
     if args['toc']: # Scrap Table of Contents
-      info = scrapper.narrator(toc=True, html=html)
+      info = narrator.narrator(toc=True, html=html)
     elif args['quotes'] and args['audios']:
-      info = scrapper.narrator(quotes=True, audios=True, html=html)
+      info = narrator.narrator(quotes=True, audios=True, html=html)
     elif args['quotes']:
-      info = scrapper.narrator(quotes=True, html=html)
+      info = narrator.narrator(quotes=True, html=html)
     elif args['audios']:
-      info = scrapper.narrator(audios=True, html=html)
+      info = narrator.narrator(audios=True, html=html)
     else: # Scrap content (quotes and audio sources, html=html)
-      info = scrapper.narrator(quotes=True, audios=True, html=html)
+      info = narrator.narrator(quotes=True, audios=True, html=html)
   else:
     info = "Please select a page to scrap."
 

@@ -13,14 +13,14 @@
 
 """
 
-from bs4 import BeautifulSoup as BS
+from bs4 import BeautifulSoup as bs
 import requests
 
 ## Get page html
 def getWikiHTML():
   urlBase = "https://darkestdungeon.gamepedia.com/Narrator"
   response = requests.get(urlBase).content
-  soup = BS(response,'html.parser')
+  soup = bs(response,'html.parser')
   return soup
 
 #### Table of Contents
