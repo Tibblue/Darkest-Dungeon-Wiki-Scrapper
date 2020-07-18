@@ -24,8 +24,8 @@ def main():
   ## Page selector arguments
   parser.add_argument('-n','--narrator', action='store_true', help='Scrap Narrator Page (default: scraps quotes and audio source)')
   parser.add_argument('--toc', action='store_true', help='Scrap Table of Contents (from Narrator Page)')
-  # parser.add_argument('--quotes', action='store_true', help='Scrap Narrator Quotes (from Narrator Page)')
-  # parser.add_argument('--audio', action='store_true', help='Scrap Audio Source Links (from Narrator Page)')
+  parser.add_argument('--quotes', action='store_true', help='Scrap Narrator Quotes (from Narrator Page)')
+  parser.add_argument('--audios', action='store_true', help='Scrap Audio Source Links (from Narrator Page)')
   args = vars(parser.parse_args())
 
   ## Global arguments parse
@@ -41,9 +41,14 @@ def main():
   if args['narrator']: # Narrator page (default: scrap quotes and audio sources)
     if args['toc']: # Scrap Table of Contents
       info = scrapper.narrator(toc=True)
-    # TODO add more options with arguments
+    elif args['quotes'] and args['audios']:
+      info = scrapper.narrator(quotes=True, audios=True)
+    elif args['quotes']:
+      info = scrapper.narrator(quotes=True)
+    elif args['audios']:
+      info = scrapper.narrator(audios=True)
     else: # Scrap content (quotes and audio sources)
-      info = scrapper.narrator(content=True)
+      info = scrapper.narrator(quotes=True, audios=True)
   else:
     info = "Please select a page to scrap."
 
