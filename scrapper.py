@@ -56,27 +56,15 @@ def parse_content(html):
   # return audios
 
   list_table_and_audio = html.find_all(['table','audio'])
-  content = []
+  content = {}
   last_quote = ''
-  last_tag = ''
   for elem in list_table_and_audio:
-    # content.append(elem.name)
-    # if elem.name=='table':
-    #   quote = elem.find('i').contents[0]
-    #   content.append({'table': quote})
-    #   last_quote = quote
-    # elif elem.name=='audio':
-    #   source = elem.find('source').attrs['src']
-    #   content.append({'audio': source})
     if elem.name=='table':
-      if last_tag=='table':
-        content.append({last_quote: None})
       last_quote = elem.find('i').contents[0]
-      last_tag = 'table'
+      content[last_quote] = []
     if elem.name=='audio':
       source = elem.find('source').attrs['src']
-      content.append({last_quote: source})
-      last_tag = 'audio'
+      content[last_quote].append(source)
   return content
 
 
