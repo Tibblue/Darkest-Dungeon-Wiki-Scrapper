@@ -20,7 +20,8 @@ def main():
   parser = argparse.ArgumentParser(description='Darkest Dungeon Wiki Scrapper.\nSelect the desired page and details to scrap using the arguments below.')
   ## Global arguments
   parser.add_argument('-o','--output', type=str, help='Ficheiro de output')
-  # parser.add_argument('-d','--download', type=str,help='Download all scraped Audio/Image sources (from the scraped results, in any page)')
+  # parser.add_argument('-d','--download', action='store_true', help='Download all scraped Audio/Image sources (from the scraped results, in any page)')
+  parser.add_argument('--html', action='store_true', help='Scrap all request elements, but leave them in their original HTML parts.')
   ## Page selector arguments
   parser.add_argument('-n','--narrator', action='store_true', help='Scrap Narrator Page (default: scraps quotes and audio source)')
   parser.add_argument('--toc', action='store_true', help='Scrap Table of Contents (from Narrator Page)')
@@ -30,25 +31,31 @@ def main():
 
   ## Global arguments parse
   # select output
-  if args['output'] is None:
-    output = sys.stdout
-  else:
+  if args['output']:
     output = open(args['output'],'w+')
+  else:
+    output = sys.stdout
+  # HTML mode
+  if args['html']:
+    html = True
+  else:
+    html = False
+
 
   ## Select user scrap request
   # Only one page can be scraped at a time.
   # Some requests on the same page can be merged.
   if args['narrator']: # Narrator page (default: scrap quotes and audio sources)
     if args['toc']: # Scrap Table of Contents
-      info = scrapper.narrator(toc=True)
+      info = scrapper.narrator(toc=True, html=html)
     elif args['quotes'] and args['audios']:
-      info = scrapper.narrator(quotes=True, audios=True)
+      info = scrapper.narrator(quotes=True, audios=True, html=html)
     elif args['quotes']:
-      info = scrapper.narrator(quotes=True)
+      info = scrapper.narrator(quotes=True, html=html)
     elif args['audios']:
-      info = scrapper.narrator(audios=True)
-    else: # Scrap content (quotes and audio sources)
-      info = scrapper.narrator(quotes=True, audios=True)
+      info = scrapper.narrator(audios=True, html=html)
+    else: # Scrap content (quotes and audio sources, html=html)
+      info = scrapper.narrator(quotes=True, audios=True, html=html)
   else:
     info = "Please select a page to scrap."
 
