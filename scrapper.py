@@ -68,21 +68,9 @@ def parse_content(html):
   return content
 
 
-# # cria a dic com uma palavra
-# def create_dic(word,lista_soup):
-#   palavras = []
-#   for i in reversed(range(len(lista_soup))):
-#     num_silabas = lista_soup[i].find('div',{'class':'row wordsBlock'})['n'].split()[0]
-#     lista_palavras = lista_soup[i].find('div',{'class':'row wordsBlock'})
-#     for html_palavra in lista_palavras:
-#         palavra = html_palavra.string
-#         if word != palavra:
-#           palavras.append(palavra)
-#   return palavras
-
 # get narrator lines
 # currently only accepts one at a time
-def narrator_lines(toc=False, content=False):
+def narrator(toc=False, content=False):
   soup = getHTML()
   if toc:
     info = get_table_of_content(soup)
@@ -93,7 +81,7 @@ def narrator_lines(toc=False, content=False):
   return info
 
 if __name__ == "__main__":
-  # info = narrator_lines()
-  info = narrator_lines(toc=True)
-  # info = narrator_lines(content=True)
+  # info = narrator()
+  info = narrator(toc=True)
+  # info = narrator(content=True)
   print(info)
