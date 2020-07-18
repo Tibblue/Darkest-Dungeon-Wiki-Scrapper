@@ -15,6 +15,7 @@
 
 from bs4 import BeautifulSoup as bs
 import requests
+import download as downld
 
 ## Get page html
 def getWikiHTML():
@@ -74,7 +75,7 @@ def get_quotes(soup, html=False):
 
 ## Audio Sources
 # Get audios
-def get_audios(soup, html=False):
+def get_audios(soup, html=False, download=False):
   audios_html = soup.find('div',{"class":"mw-parser-output"})
   list_audio = audios_html.find_all('audio')
   if html:
@@ -96,12 +97,21 @@ def narrator(toc=False, quotes=False, audios=False, download=False, html=False):
     info = get_table_of_content(soup, html)
   elif quotes and audios:
     info = get_quotes_audios(soup, html)
+    if download:
+      urls = list(info.values())
+      for elem in urls:
+        downld.download_files(elem, download)
   elif quotes:
     info = get_quotes(soup, html)
   elif audios:
     info = get_audios(soup, html)
+    if download: downld.download_files(info, download)
   else: # quotes and audio sources is the default
     info = get_quotes_audios(soup, html)
+    if download:
+      urls = list(info.values())
+      for elem in urls:
+        downld.download_files(elem, download)
   return info
 
 if __name__ == "__main__":

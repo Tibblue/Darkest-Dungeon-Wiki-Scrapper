@@ -10,9 +10,10 @@
 """
 
 from random import choice
-import narrator
 import argparse, sys
 import regex as re
+import narrator
+import download as downld
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
   parser = argparse.ArgumentParser(description='Darkest Dungeon Wiki Scrapper.\nSelect the desired page and details to scrap using the arguments below.')
   ## Global arguments
   parser.add_argument('-o','--output', type=str, help='Output File')
-  # parser.add_argument('-d','--download', action='store_true', help='Download all scraped Audio/Image sources (from the scraped results, in any page)')
+  parser.add_argument('-d','--download', type=str, help='Download all scraped Audio/Image sources (from the scraped results, in any page)')
   parser.add_argument('--html', action='store_true', help='Scrap all request elements, but leave them in their original HTML parts.')
   ## Page selector arguments
   parser.add_argument('-n','--narrator', action='store_true', help='Scrap Narrator Page (default: scraps quotes and audio source)')
@@ -32,6 +33,7 @@ def main():
   ## Global arguments parse
   # select output
   if args['output']:
+    downld.check_dir(args['output'])
     output = open(args['output'],'w+')
   else:
     output = sys.stdout
@@ -40,6 +42,11 @@ def main():
     html = True
   else:
     html = False
+  # Download mode
+  if args['download']:
+    download = args['download']
+  else:
+    download = False
 
 
   ## Select user scrap request
@@ -49,13 +56,13 @@ def main():
     if args['toc']: # Scrap Table of Contents
       info = narrator.narrator(toc=True, html=html)
     elif args['quotes'] and args['audios']:
-      info = narrator.narrator(quotes=True, audios=True, html=html)
+      info = narrator.narrator(quotes=True, audios=True, html=html, download=download)
     elif args['quotes']:
       info = narrator.narrator(quotes=True, html=html)
     elif args['audios']:
-      info = narrator.narrator(audios=True, html=html)
+      info = narrator.narrator(audios=True, html=html, download=download)
     else: # Scrap content (quotes and audio sources, html=html)
-      info = narrator.narrator(quotes=True, audios=True, html=html)
+      info = narrator.narrator(quotes=True, audios=True, html=html, download=download)
   else:
     info = "Please select a page to scrap."
 
